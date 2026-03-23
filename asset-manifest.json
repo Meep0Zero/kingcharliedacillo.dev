@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/kingcharlie-portfolio/static/css/main.0ae9745c.css",
-    "main.js": "/kingcharlie-portfolio/static/js/main.7fe09e21.js",
+    "main.js": "/kingcharlie-portfolio/static/js/main.606ae0ba.js",
     "static/js/453.d5c5a335.chunk.js": "/kingcharlie-portfolio/static/js/453.d5c5a335.chunk.js",
     "static/media/ecommerce-1.png": "/kingcharlie-portfolio/static/media/ecommerce-1.965eb1f3cf4ed816ac52.png",
     "static/media/ecommerce-2.png": "/kingcharlie-portfolio/static/media/ecommerce-2.6f52171394de1f02a598.png",
@@ -34,16 +34,16 @@
     "static/media/ticketing-6.png": "/kingcharlie-portfolio/static/media/ticketing-6.0601fe4cdfefa8629c6c.png",
     "static/media/ecommerce-15.png": "/kingcharlie-portfolio/static/media/ecommerce-15.97756a185304d40a5abd.png",
     "static/media/ecommerce-18.png": "/kingcharlie-portfolio/static/media/ecommerce-18.47320bd7e369d5eb774c.png",
-    "static/media/resume.pdf": "/kingcharlie-portfolio/static/media/resume.d41cb1a31e6a289daef2.pdf",
     "static/media/comingsoon.png": "/kingcharlie-portfolio/static/media/comingsoon.8d7256324991402aad37.png",
     "static/media/charles.jpg": "/kingcharlie-portfolio/static/media/charles.85b79dbbe7769afb412f.jpg",
+    "static/media/KingCharlie_Dacillo_Portfolio.pdf": "/kingcharlie-portfolio/static/media/KingCharlie_Dacillo_Portfolio.aa6ce24832f51a310317.pdf",
     "index.html": "/kingcharlie-portfolio/index.html",
     "main.0ae9745c.css.map": "/kingcharlie-portfolio/static/css/main.0ae9745c.css.map",
-    "main.7fe09e21.js.map": "/kingcharlie-portfolio/static/js/main.7fe09e21.js.map",
+    "main.606ae0ba.js.map": "/kingcharlie-portfolio/static/js/main.606ae0ba.js.map",
     "453.d5c5a335.chunk.js.map": "/kingcharlie-portfolio/static/js/453.d5c5a335.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.0ae9745c.css",
-    "static/js/main.7fe09e21.js"
+    "static/js/main.606ae0ba.js"
   ]
 }
