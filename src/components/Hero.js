@@ -344,10 +344,10 @@ const Hero = () => {
     setResumeDownloading(true);
     const link = document.createElement('a');
     link.href = resumePDF;
-    link.download = 'KingCharlie_Dacillo_Portfolio.pdf';
+    link.download = 'KingCharlie_Resume.pdf';
     document.body.appendChild(link); link.click(); document.body.removeChild(link);
     await new Promise(r => setTimeout(r, 1200));
-    toast('success', 'Portfolio downloaded successfully');
+    toast('success', 'Resume downloaded successfully');
     setResumeDownloading(false);
   };
 
