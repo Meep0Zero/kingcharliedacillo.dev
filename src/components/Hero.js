@@ -90,7 +90,7 @@ const NAV_ITEMS = [
   { label: 'About',      href: '#about'      },
   { label: 'Projects',   href: '#projects'   },
   { label: 'Experience', href: '#experience' },
-  { label: 'Contact',    href: '#contact'    },
+  // { label: 'Contact',    href: '#contact'    },
 ];
 
 const STATS = [
@@ -411,7 +411,7 @@ const Hero = () => {
                   {resumeDownloading ? <><FaFileAlt /> Downloading…</> : <><FaDownload /> Download CV</>}
                 </button>
                 <a href="#projects" className="btn-secondary">See My Work</a>
-                <a href="#contact" className="btn-ghost">Contact <FaArrowRight className="btn-arrow" /></a>
+                {/* <a href="#contact" className="btn-ghost">Contact <FaArrowRight className="btn-arrow" /></a> */}
               </div>
             </div>
 
