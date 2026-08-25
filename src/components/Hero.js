@@ -17,6 +17,7 @@ import { SiBootstrap } from 'react-icons/si';
 import { FaGitAlt } from 'react-icons/fa';
 import { VscCode } from 'react-icons/vsc';
 import './Hero.css';
+import Lanyard from './Lanyard';
 
 import profilePhoto     from '../assets/charles.jpg';
 import resumePDF        from '../assets/King_Charlie_Dacillo_Resume.pdf';
@@ -296,10 +297,10 @@ const PROJECTS = [
     ],
   },
   {
-    title: 'CAS - Campus Access System',
-    subtitle: 'Attendance & Access - Mobile Verification - Reports',
-    description: 'Campus Access System managing student check-ins, visitor logging, and attendance reporting with QR verification and secure access control.',
-    impact: 'Improved campus security and attendance visibility with centralized reporting.',
+    title: 'CAS - Corporate Affairs System',
+    subtitle: 'Document Management · Approvals · Corporate Records',
+    description: 'Corporate Affairs System that streamlines document management, departmental approvals, and corporate record-keeping — enabling organized, traceable, and efficient handling of company-wide affairs.',
+    impact: 'Reduced document processing time and improved departmental coordination through centralized corporate records management.',
     technologies: ['Laravel', 'MySQL', 'JavaScript', 'Bootstrap'],
     icon: <FaLock />,
     iconColor: '#2563EB',
@@ -504,11 +505,15 @@ const Hero = () => {
   const [cmdOpen,  setCmdOpen]  = useState(false);
   const [cmdQuery, setCmdQuery] = useState('');
   const [cmdIdx,   setCmdIdx]   = useState(0);
+  const [projectFilter, setProjectFilter] = useState('All');
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [carouselIndex, setCarouselIndex] = useState(0);
 
   const vcardCardRef     = useRef(null);
   const vcardCordPathRef = useRef(null);
   const vcardPhysics     = useRef({ x: 0, vel: 0, dragging: false, startX: 0, startCardX: 0 });
   const vcardRafRef      = useRef(null);
+  const carouselRef      = useRef(null);
 
   /* -- theme -- */
   useEffect(() => {
@@ -637,6 +642,33 @@ const Hero = () => {
     setResumeDownloading(false);
   };
 
+  /* -- carousel scroll controls -- */
+  const carouselScrollBy = useCallback((dir) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const slot = el.querySelector('.pcard-slot');
+    const step = (slot?.offsetWidth || 320) + 16;
+    el.scrollBy({ left: dir * step, behavior: 'smooth' });
+  }, []);
+  const carouselScrollTo = useCallback((index) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const slot = el.querySelector('.pcard-slot');
+    const step = (slot?.offsetWidth || 320) + 16;
+    el.scrollTo({ left: index * step, behavior: 'smooth' });
+  }, []);
+  const onCarouselScroll = useCallback(() => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const slot = el.querySelector('.pcard-slot');
+    const step = (slot?.offsetWidth || 320) + 16;
+    setCarouselIndex(Math.round(el.scrollLeft / step));
+  }, []);
+  useEffect(() => {
+    setCarouselIndex(0);
+    if (carouselRef.current) carouselRef.current.scrollLeft = 0;
+  }, [projectFilter]);
+
   const openGallery  = (p, i = 0) => { setGallery({ open: true, project: p, index: i }); document.body.style.overflow = 'hidden'; };
   const closeGallery = ()         => { setGallery(g => ({ ...g, open: false })); document.body.style.overflow = ''; };
   const galleryNext  = () => setGallery(g => ({ ...g, index: (g.index + 1) % g.project.gallery.length }));
@@ -729,7 +761,7 @@ const Hero = () => {
           <div className="nav-right">
             <span className="nav-avail">
               <span className="nav-avail-dot" />
-              Available
+              Available Worldwide
             </span>
             <button className="nav-cmd-trigger" onClick={() => { setCmdOpen(true); setCmdQuery(''); setCmdIdx(0); }} title="Ctrl+K">
               <span>? K</span>
@@ -739,6 +771,34 @@ const Hero = () => {
                 <span className="theme-thumb">{darkMode ? <FaMoon /> : <FaSun />}</span>
               </span>
             </button>
+            <button
+              className={`nav-burger${mobileNavOpen ? ' active' : ''}`}
+              onClick={() => setMobileNavOpen(v => !v)}
+              aria-label="Toggle mobile navigation"
+            >
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+        {/* Mobile slide-out menu */}
+        <div className={`nav-mobile-menu${mobileNavOpen ? ' open' : ''}`}>
+          {[
+            { label: 'Home',       to: '/'           },
+            { label: 'Projects',   to: '/projects'   },
+            { label: 'Experience', to: '/experience' },
+          ].map(({ label, to }) => (
+            <Link
+              key={label}
+              to={to}
+              className={`nav-mobile-link${path === to ? ' active' : ''}`}
+              onClick={() => setMobileNavOpen(false)}
+            >
+              {label}
+              <FaArrowRight />
+            </Link>
+          ))}
+          <div className="nav-mobile-avail">
+            <span className="nav-avail-dot" /> Available for work
           </div>
         </div>
       </nav>
@@ -756,34 +816,76 @@ const Hero = () => {
           <>
             {/* Hero header */}
             <header className="hero-wrap">
-              <div className="hero-container">
+              {/* 3D Lanyard (desktop only — hidden on mobile via Lanyard.js) */}
+              <Lanyard
+                position={[0, 0, 16]}
+                gravity={[0, -40, 0]}
+                fov={20}
+                lanyardWidth={1.5}
+                frontImage={profilePhoto}
+                imageFit="cover"
+              />
+              <div className="hero-container hero-container--solo">
                 <div className="hero-left">
                   <div className="hero-eyebrow reveal">
                     <span className="eyebrow-dot" />
-                    Full Stack Developer — Davao City, Philippines
+                    Open to Remote, Relocation & International Roles — Based in Philippines
                   </div>
                   <h1 className="hero-name reveal delay-1">
                     King Charlie<br /><em>R. Dacillo</em>
                   </h1>
                   <p className="hero-tagline reveal delay-2">
-                    I build production systems that work — from infrastructure to interfaces.
+                    I build production systems that ship — from infrastructure to interfaces.
+                    Full-stack developer specialising in Laravel + React with an AI-first mindset.
                   </p>
                   <div className="hero-actions reveal delay-3">
                     <button className="btn-primary" onClick={handleDownloadResume} disabled={resumeDownloading}>
                       {resumeDownloading ? <><FaFileAlt /> Downloading</> : <><FaDownload /> Download CV</>}
                     </button>
                     <Link to="/projects" className="btn-secondary">See My Work</Link>
+                    <button className="btn-ghost" onClick={copyEmail}>
+                      <FaEnvelope /> Hire Me
+                    </button>
+                  </div>
+
+                  {/* Stats row — social proof */}
+                  <div className="hero-stats reveal delay-3">
+                    <div className="hstat">
+                      <span className="hstat-num">3+</span>
+                      <span className="hstat-lbl">Years Shipping</span>
+                    </div>
+                    <div className="hstat-sep" />
+                    <div className="hstat">
+                      <span className="hstat-num">10+</span>
+                      <span className="hstat-lbl">Systems Built</span>
+                    </div>
+                    <div className="hstat-sep" />
+                    <div className="hstat">
+                      <span className="hstat-num">120+</span>
+                      <span className="hstat-lbl">Branches Managed</span>
+                    </div>
+                    <div className="hstat-sep" />
+                    <div className="hstat">
+                      <span className="hstat-num">100%</span>
+                      <span className="hstat-lbl">Ships to Prod</span>
+                    </div>
                   </div>
                 </div>
-                <div className="hero-right reveal-scale">
-                  <div className="photo-outer">
-                    <div className="photo-frame">
-                      <img src={profilePhoto} alt="King Charlie R. Dacillo" className="photo" />
-                    </div>
-                    <div className="photo-label">
-                      <span className="photo-label-dot" />
-                      Full Stack Developer
-                    </div>
+              </div>
+
+              {/* Mobile-only profile card (Lanyard hidden on <768px) */}
+              <div className="hero-mobile-card">
+                <div className="hmc-strap">
+                  <span className="hmc-strap-hole" />
+                </div>
+                <div className="hmc-card">
+                  <div className="hmc-photo">
+                    <img src={profilePhoto} alt="King Charlie R. Dacillo" />
+                  </div>
+                  <div className="hmc-info">
+                    <p className="hmc-name">King Charlie R. Dacillo</p>
+                    <p className="hmc-role">Full Stack Developer</p>
+                    <p className="hmc-id">ID · KCD · 2026</p>
                   </div>
                 </div>
               </div>
@@ -807,6 +909,7 @@ const Hero = () => {
                       <p className="about-p">Managing IT infrastructure for 120+ branches across the Philippines wired me differently. While most developers optimize for happy paths, I think about failure modes and production behaviour first. I've seen what happens when a POS database locks during peak hours — that operational instinct lives in every system I build.</p>
                       <p className="about-p">My stack is deliberate: <strong>Laravel</strong> for expressive backends. <strong>React + Inertia.js</strong> for reactive UIs without decoupled overhead. <strong>MySQL</strong> with careful schema design — because a poorly modelled table becomes a performance crisis at scale.</p>
                       <p className="about-p">Recently, I've been exploring artificial intelligence more deeply, with a strong focus on incorporating AI tools and techniques into modern applications. My current work involves building AI-driven solutions, developing intelligent systems, and utilizing generative AI to streamline development processes and deliver innovative, state-of-the-art technology.</p>
+                      <p className="about-p">I'm currently <strong>open to international opportunities</strong> — remote-first or relocation. Comfortable working across time zones, with strong written English and a track record of shipping in async, distributed teams.</p>
                       <p className="about-p about-closer">I build things that work. And I stay until they do.</p>
                     </div>
                   </div>
@@ -869,15 +972,31 @@ const Hero = () => {
                 <span className="sec-num">02</span>
                 <div>
                   <h2 className="sec-title">Projects</h2>
-                  <p className="sec-sub">Systems I designed, built, and shipped</p>
+                  <p className="sec-sub">Systems I designed, built, and shipped — {PROJECTS.length} total</p>
                 </div>
+              </div>
+
+              {/* Filter tabs */}
+              <div className="pfilter-bar reveal">
+                {['All', 'Live', 'Deployed', 'In Development', 'Completed'].map(f => {
+                  const count = f === 'All' ? PROJECTS.length : PROJECTS.filter(p => p.status === f).length;
+                  return (
+                    <button
+                      key={f}
+                      className={`pfilter-btn${projectFilter === f ? ' active' : ''}`}
+                      onClick={() => setProjectFilter(f)}
+                    >
+                      {f} <span className="pfilter-count">{count}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
             {/* Compact 2-column project list */}
             <div className="page-container">
               <div className="plist">
-                {PROJECTS.map((p, i) => (
+                {(projectFilter === 'All' ? PROJECTS : PROJECTS.filter(p => p.status === projectFilter)).map((p, i) => (
                   <div
                     key={i}
                     className="plist-item"
@@ -908,56 +1027,83 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Carousel — bounded by page-container so it's centered like Home */}
+            {/* Carousel — snap-scroll, swipeable on mobile, arrows + dots on desktop */}
             <div className="page-container">
-              <div className="carousel-wrap">
-                <div
-                  className="carousel-track"
-                  style={{ '--track-half': `${PROJECTS.length * 296}px` }}
-                >
-                  {[...PROJECTS, ...PROJECTS].map((p, i) => (
+              {(() => {
+                const carouselProjects = projectFilter === 'All' ? PROJECTS : PROJECTS.filter(p => p.status === projectFilter);
+                return (
+                  <>
+                    <div className="pcarousel-head">
+                      <p className="pcarousel-label">Featured Showcase</p>
+                      <div className="pcarousel-controls">
+                        <button
+                          className="pcarousel-arrow"
+                          onClick={() => carouselScrollBy(-1)}
+                          aria-label="Previous project"
+                          disabled={carouselIndex === 0}
+                        >
+                          <FaChevronLeft />
+                        </button>
+                        <span className="pcarousel-counter">
+                          <strong>{Math.min(carouselIndex + 1, carouselProjects.length)}</strong>
+                          <span>/ {carouselProjects.length}</span>
+                        </span>
+                        <button
+                          className="pcarousel-arrow"
+                          onClick={() => carouselScrollBy(1)}
+                          aria-label="Next project"
+                          disabled={carouselIndex >= carouselProjects.length - 1}
+                        >
+                          <FaChevronRight />
+                        </button>
+                      </div>
+                    </div>
+
                     <div
-                      key={i}
-                      className="pcard-slot"
-                      onClick={() => p.gallery?.length > 0 && openGallery(p, 0)}
+                      className="pcarousel-track"
+                      ref={carouselRef}
+                      onScroll={onCarouselScroll}
                     >
-                      <div
-                        className="pcard"
-                        style={{
-                          '--pc': p.iconColor,
-                          ...(p.gallery?.length > 0 && { backgroundImage: `url(${p.gallery[0].url})` }),
-                        }}
-                        role="button"
-                        tabIndex={i < PROJECTS.length ? 0 : -1}
-                        onKeyDown={e => e.key === 'Enter' && p.gallery?.length > 0 && openGallery(p, 0)}
-                      >
-                        <div className="pcard-overlay" />
-                        {!p.gallery?.length && (
-                          <div className="pcard-no-img">
-                            <span className="pcard-big-icon" style={{ color: p.iconColor }}>{p.icon}</span>
-                          </div>
-                        )}
-                        <div className="pcard-content">
-                          <div className="pcard-top">
-                            <span className={`pbadge ${p.status === 'Live' ? 'pb-live' : p.status === 'Deployed' ? 'pb-done' : 'pb-wip'}`}>
-                              {p.status === 'Live' && <span className="pbadge-dot" />}
-                              {p.status}
-                            </span>
-                            <span className="pcard-year">{p.year}</span>
-                          </div>
-                          <div className="pcard-bottom">
-                            <h3 className="pcard-title">{p.title}</h3>
-                            <p className="pcard-sub">{p.subtitle}</p>
-                            <div className="pcard-reveal">
+                      {carouselProjects.map((p, i) => (
+                        <div
+                          key={i}
+                          className="pcard-slot"
+                          onClick={() => p.gallery?.length > 0 && openGallery(p, 0)}
+                          role="button"
+                          tabIndex={0}
+                          onKeyDown={e => e.key === 'Enter' && p.gallery?.length > 0 && openGallery(p, 0)}
+                        >
+                          <div className="pcard" style={{ '--pc': p.iconColor }}>
+                            <div
+                              className="pcard-media"
+                              style={p.gallery?.length > 0 ? { backgroundImage: `url(${p.gallery[0].url})` } : undefined}
+                            >
+                              {!p.gallery?.length && (
+                                <span className="pcard-media-icon" style={{ color: p.iconColor }}>{p.icon}</span>
+                              )}
+                              <span className={`pbadge ${p.status === 'Live' ? 'pb-live' : p.status === 'Deployed' ? 'pb-done' : 'pb-wip'}`}>
+                                {p.status === 'Live' && <span className="pbadge-dot" />}
+                                {p.status}
+                              </span>
+                            </div>
+                            <div className="pcard-body">
+                              <div className="pcard-body-head">
+                                <h3 className="pcard-title">{p.title}</h3>
+                                <span className="pcard-year">{p.year}</span>
+                              </div>
+                              <p className="pcard-sub">{p.subtitle}</p>
                               <p className="pcard-impact">{p.impact}</p>
                               <div className="pcard-pills">
-                                {p.technologies.slice(0, 4).map((t, ti) => (
+                                {p.technologies.slice(0, 3).map((t, ti) => (
                                   <span key={ti} className="ppill-card">{t}</span>
                                 ))}
+                                {p.technologies.length > 3 && (
+                                  <span className="ppill-card ppill-more">+{p.technologies.length - 3}</span>
+                                )}
                               </div>
                               <div className="pcard-actions">
                                 <span className="pcard-view-btn">
-                                  <FaImages /> {p.gallery?.length > 0 ? `${p.gallery.length} Screenshots` : 'Coming Soon'}
+                                  <FaImages /> {p.gallery?.length > 0 ? `${p.gallery.length} shots` : 'Coming soon'}
                                 </span>
                                 {p.button?.url && (
                                   <a href={p.button.url} target="_blank" rel="noopener noreferrer"
@@ -969,11 +1115,24 @@ const Hero = () => {
                             </div>
                           </div>
                         </div>
-                      </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
+
+                    <div className="pcarousel-dots" role="tablist" aria-label="Project navigation">
+                      {carouselProjects.map((_, i) => (
+                        <button
+                          key={i}
+                          className={`pcarousel-dot${i === carouselIndex ? ' active' : ''}`}
+                          onClick={() => carouselScrollTo(i)}
+                          aria-label={`Go to project ${i + 1}`}
+                          aria-selected={i === carouselIndex}
+                          role="tab"
+                        />
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
           </section>
         )}

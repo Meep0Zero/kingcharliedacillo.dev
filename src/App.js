@@ -8,7 +8,7 @@ function App() {
   return (
     <HashRouter>
       <Hero />
-      <ChatBot />
+      {/* <ChatBot /> */}
     </HashRouter>
   );
 }

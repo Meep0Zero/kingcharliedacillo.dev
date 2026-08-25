@@ -5,6 +5,9 @@
   "homepage": "https://meep0zero.github.io/kingcharliedacillo.dev",
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
+    "@react-three/rapier": "^1.5.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -12,6 +15,7 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "lucide-react": "^0.556.0",
+    "meshline": "^3.3.1",
     "node-fetch": "^3.3.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -20,6 +24,7 @@
     "react-router-dom": "^7.14.2",
     "react-scripts": "5.0.1",
     "sileo": "^0.1.5",
+    "three": "^0.184.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
